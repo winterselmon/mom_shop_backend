@@ -5,7 +5,7 @@ const incomeSchema = new Schema({
     description: {
         type: String,
     },
-    price: {
+    income: {
         type: Number,
     },
     date: {
@@ -14,4 +14,4 @@ const incomeSchema = new Schema({
 
 });
 
-module.exports = Product = mongoose.model('income', incomeSchema);
+module.exports = mongoose.model('income', incomeSchema);

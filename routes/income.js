@@ -1,10 +1,23 @@
 const express = require('express');
 const income = require('../model/income');
 const router = express.Router();
+const dateTimeHelper = require('../helper/date_time_helper');
 
 router.get('/', async (req, res) => {
-  const result = await income.find({});
-  res.json(result);
+  const result = await income.find();
+  const incomeList = []
+  result.map((value) => {
+    const dateTime = dateTimeHelper.getDate(value['date']);
+    incomeList.push({
+      _id: value['_id'],
+      description: value['description'],
+      income: value['income'],
+      date: value['date'],
+      month: dateTime.month,
+      year: dateTime.year,
+    })
+  });
+  res.json(incomeList);
 });
 
 router.get('/:id', async (req, res) => {
@@ -16,7 +29,10 @@ router.post('/', async (req, res) => {
   const payload = req.body;
   const result = income(payload);
   await result.save();
-  res.status(201).end();
+  res.status(201).json({
+    success: true,
+    msg: 'add income successfully.',
+  });
 });
 
 router.patch('/', (req, res) => {
