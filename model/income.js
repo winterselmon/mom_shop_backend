@@ -11,6 +11,12 @@ const incomeSchema = new Schema({
     date: {
         type: Date,
     },
+    month: {
+        type: String,
+    },
+    year: {
+        type: String,
+    }
 
 });
 

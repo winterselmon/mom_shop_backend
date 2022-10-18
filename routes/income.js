@@ -4,24 +4,21 @@ const router = express.Router();
 const dateTimeHelper = require('../helper/date_time_helper');
 
 router.get('/', async (req, res) => {
-  const result = await income.find();
-  const incomeList = []
-  result.map((value) => {
-    const dateTime = dateTimeHelper.getDate(value['date']);
-    incomeList.push({
-      _id: value['_id'],
-      description: value['description'],
-      income: value['income'],
-      date: value['date'],
-      month: dateTime.month,
-      year: dateTime.year,
-    })
-  });
-  res.json(incomeList);
+  const payload = req.body;
+  try {
+    if (payload.month != '' && payload.year != '') {
+      const result = await income.find({ month: payload.month, year: payload.year }).lean();
+      return res.json(result);
+    } else {
+      const result = await income.find().lean();
+      return res.json(result);
+    }
+  } catch (error) {
+  }
 });
 
 router.get('/:id', async (req, res) => {
-  const result = await income.findById(req.body._id);
+  const result = await income.findById(req.body._id).lean();
   return res.status(200).json(result);
 });
 
